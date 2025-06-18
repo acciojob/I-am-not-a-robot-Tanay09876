@@ -1,17 +1,30 @@
-<h3 id="h">Please click on the identical tiles to verify that you are not a robot.</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I'm Not a Robot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<div class="flex" id="image-container">
-  <img class="tile" id="img0" />
-  <img class="tile" id="img1" />
-  <img class="tile" id="img2" />
-  <img class="tile" id="img3" />
-  <img class="tile" id="img4" />
-  <img class="tile" id="img5" />
-</div>
+  <h3 id="h">Please click on the identical tiles to verify that you are not a robot.</h3>
 
-<div class="flex">
-  <button id="reset" style="display: none;">Reset</button>
-  <button id="verify" style="display: none;">Verify</button>
-</div>
+  <div class="flex" id="image-container">
+    <img class="tile img1" data-class="img1" />
+    <img class="tile img2" data-class="img2" />
+    <img class="tile img3" data-class="img3" />
+    <img class="tile img4" data-class="img4" />
+    <img class="tile img5" data-class="img5" />
+    <img class="tile img1" data-class="img1" /> 
+  </div>
 
-<p id="para"></p>
+  <div class="flex">
+    <button id="reset" style="display: none;">Reset</button>
+    <button id="verify" style="display: none;">Verify</button>
+  </div>
+
+  <p id="para"></p>
+
+  <script src="script.js"></script>
+</body>
+</html>
