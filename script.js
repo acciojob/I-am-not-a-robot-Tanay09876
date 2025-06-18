@@ -1,32 +1,56 @@
-//your code here
+// script.js
+
 const images = ["img1", "img2", "img3", "img4", "img5"];
-const container = document.getElementById("image-container");
-const h = document.getElementById("h");
-const para = document.getElementById("para");
-const resetBtn = document.getElementById("reset");
-const verifyBtn = document.getElementById("verify");
+let selectedImages = [];
+let duplicateClass = "";
 
-let selected = [];
 
-function shuffleAndRenderImages() {
+const h = document.createElement("h3");
+h.id = "h";
+h.innerText = "Please click on the identical tiles to verify that you are not a robot.";
+document.body.prepend(h);
+
+const container = document.createElement("div");
+container.classList.add("flex");
+container.classList.add("container");
+document.querySelector("main").appendChild(container);
+
+const resetBtn = document.createElement("button");
+resetBtn.id = "reset";
+resetBtn.innerText = "Reset";
+resetBtn.style.display = "none";
+document.body.appendChild(resetBtn);
+
+const verifyBtn = document.createElement("button");
+verifyBtn.id = "verify";
+verifyBtn.innerText = "Verify";
+verifyBtn.style.display = "none";
+document.body.appendChild(verifyBtn);
+
+const result = document.createElement("p");
+result.id = "para";
+document.body.appendChild(result);
+
+
+function setupImages() {
   container.innerHTML = "";
-  para.textContent = "";
-  selected = [];
-  verifyBtn.style.display = "none";
+  selectedImages = [];
+  result.innerText = "";
   resetBtn.style.display = "none";
-  h.textContent = "Please click on the identical tiles to verify that you are not a robot.";
+  verifyBtn.style.display = "none";
 
-  const dupIndex = Math.floor(Math.random() * images.length);
-  const dupClass = images[dupIndex];
+  const imagesWithDup = [...images];
+  const randomImage = images[Math.floor(Math.random() * images.length)];
+  duplicateClass = randomImage;
+  imagesWithDup.push(randomImage); 
 
-  let allImages = [...images, dupClass];
+ 
+  imagesWithDup.sort(() => Math.random() - 0.5);
 
-  // Shuffle
-  allImages = allImages.sort(() => Math.random() - 0.5);
 
-  allImages.forEach((imgClass, i) => {
+  imagesWithDup.forEach((imgClass, i) => {
     const img = document.createElement("img");
-    img.className = imgClass;
+    img.classList.add(imgClass, "tile"); // critical: use classList.add, not className
     img.dataset.class = imgClass;
     img.addEventListener("click", () => handleImageClick(img));
     container.appendChild(img);
@@ -34,44 +58,39 @@ function shuffleAndRenderImages() {
 }
 
 function handleImageClick(img) {
-  if (selected.includes(img)) return;
+  if (selectedImages.includes(img)) return;
+  if (selectedImages.length >= 2) return;
 
   img.classList.add("selected");
-  selected.push(img);
+  selectedImages.push(img);
+  resetBtn.style.display = "inline";
 
-  if (selected.length === 1) {
-    resetBtn.style.display = "inline-block";
-  }
-
-  if (selected.length === 2) {
-    verifyBtn.style.display = "inline-block";
-  }
-
-  if (selected.length > 2) {
-    selected.forEach((el) => el.classList.remove("selected"));
-    selected = [];
-    verifyBtn.style.display = "none";
-    para.textContent = "You can only select two tiles.";
+  if (selectedImages.length === 2) {
+    verifyBtn.style.display = "inline";
   }
 }
 
 resetBtn.addEventListener("click", () => {
-  selected.forEach((img) => img.classList.remove("selected"));
-  selected = [];
-  para.textContent = "";
+  selectedImages.forEach((img) => img.classList.remove("selected"));
+  selectedImages = [];
+  result.innerText = "";
   resetBtn.style.display = "none";
   verifyBtn.style.display = "none";
-  h.textContent = "Please click on the identical tiles to verify that you are not a robot.";
 });
 
 verifyBtn.addEventListener("click", () => {
-  verifyBtn.style.display = "none";
-  const [img1, img2] = selected;
-  if (img1.dataset.class === img2.dataset.class) {
-    para.textContent = "You are a human. Congratulations!";
+  const [img1, img2] = selectedImages;
+  const class1 = img1.dataset.class;
+  const class2 = img2.dataset.class;
+
+  if (class1 === class2) {
+    result.innerText = "You are a human. Congratulations!";
   } else {
-    para.textContent = "We can't verify you as a human. You selected the non-identical tiles.";
+    result.innerText = "We can't verify you as a human. You selected the non-identical tiles.";
   }
+
+  verifyBtn.style.display = "none";
 });
 
-shuffleAndRenderImages();
+
+setupImages();
